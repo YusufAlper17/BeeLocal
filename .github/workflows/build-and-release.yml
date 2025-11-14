@@ -46,10 +46,10 @@ jobs:
         run: npm run prepare-icons
 
       - name: Build TypeScript
-        run: tsc
+        run: npx tsc
 
       - name: Build Vite
-        run: vite build
+        run: npx vite build
 
       - name: Build for platform
         run: |
