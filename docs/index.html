@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BeeLocal - İTÜ Ninova için geliştirilmiş modern dosya senkronizasyon uygulaması. Ders dosyalarınızı kolayca takip edin, yönetin ve indirin.">
+    <meta name="keywords" content="BeeLocal, İTÜ, Ninova, dosya senkronizasyon, ders dosyaları, İstanbul Teknik Üniversitesi">
+    <meta name="author" content="BeeLocal Team">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BeeLocal - Ninova Dosya Senkronizasyon Uygulaması">
+    <meta property="og:description" content="İTÜ Ninova platformu için geliştirilmiş modern bir desktop uygulaması">
+    <meta property="og:image" content="images/icon.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="BeeLocal - Ninova Dosya Senkronizasyon Uygulaması">
+    <meta property="twitter:description" content="İTÜ Ninova platformu için geliştirilmiş modern bir desktop uygulaması">
+    
+    <title>BeeLocal - Ninova Dosya Senkronizasyon Uygulaması</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/icon.png">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">🐝</span>
+                    <span class="text-xl font-bold text-gray-900 tracking-tight">BeeLocal</span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features" class="nav-link">Özellikler</a>
+                    <a href="#download" class="nav-link">İndir</a>
+                    <a href="#how-to-use" class="nav-link">Nasıl Kullanılır</a>
+                    <a href="#faq" class="nav-link">SSS</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-gray-900">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#features" class="mobile-nav-link">Özellikler</a>
+                <a href="#download" class="mobile-nav-link">İndir</a>
+                <a href="#how-to-use" class="mobile-nav-link">Nasıl Kullanılır</a>
+                <a href="#faq" class="mobile-nav-link">SSS</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center">
+                <div class="flex justify-center mb-8">
+                    <div class="bee-logo">🐝</div>
+                </div>
+                
+                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 tracking-tight">
+                    BeeLocal
+                </h1>
+                
+                <p class="text-xl sm:text-2xl text-gray-700 mb-4 font-medium">
+                    Ninova Dosya Senkronizasyon Uygulaması
+                </p>
+                
+                <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
+                    İTÜ Ninova platformu için geliştirilmiş modern bir desktop uygulaması. 
+                    Ders dosyalarınızı kolayca takip edin, yönetin ve indirin.
+                </p>
+                
+                <!-- Download Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                    <a href="#download" id="primary-download-btn" class="download-btn-primary">
+                        <span id="primary-download-text">İndir</span>
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                    
+                    <a href="https://github.com/YusufAlper17/BeeLocal" target="_blank" class="download-btn-secondary">
+                        <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        GitHub'da Görüntüle
+                    </a>
+                </div>
+                
+                <!-- Version Badge -->
+                <div class="flex justify-center gap-3 flex-wrap">
+                    <span class="badge">Versiyon 1.0.0</span>
+                    <span class="badge">macOS</span>
+                    <span class="badge">Windows</span>
+                    <span class="badge">Linux</span>
+                    <span class="badge">MIT Lisans</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="section-title">Özellikler</h2>
+                <p class="section-subtitle">BeeLocal ile neler yapabilirsiniz?</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1: Güvenlik -->
+                <div class="feature-card">
+                    <div class="feature-icon bg-green-100 text-green-600">
+                        🔐
+                    </div>
+                    <h3 class="feature-title">Güvenlik</h3>
+                    <ul class="feature-list">
+                        <li><strong>Şifreli Depolama:</strong> Giriş bilgileriniz Electron'un safeStorage API'si ile güvenle şifrelenir</li>
+                        <li><strong>Beni Hatırla:</strong> Bir kez giriş yapın, bir daha şifre girmeye gerek yok</li>
+                        <li><strong>Local Veri:</strong> Tüm verileriniz cihazınızda saklanır, hiçbir veri dışarıya gönderilmez</li>
+                    </ul>
+                </div>
+                
+                <!-- Feature 2: Ders Yönetimi -->
+                <div class="feature-card">
+                    <div class="feature-icon bg-blue-100 text-blue-600">
+                        📚
+                    </div>
+                    <h3 class="feature-title">Ders Yönetimi</h3>
+                    <ul class="feature-list">
+                        <li>Tüm derslerinizi tek bir yerden görüntüleyin</li>
+                        <li>Derslere kolay erişim için düzenli liste</li>
+                        <li>Dönem ve ders kodu bilgileri</li>
+                        <li>Hızlı arama ve filtreleme</li>
+                    </ul>
+                </div>
+                
+                <!-- Feature 3: Akıllı Dosya Takibi -->
+                <div class="feature-card">
+                    <div class="feature-icon bg-purple-100 text-purple-600">
+                        📥
+                    </div>
+                    <h3 class="feature-title">Akıllı Dosya Takibi</h3>
+                    <ul class="feature-list">
+                        <li>Hangi dosyaların indirildiğini/indirilmediğini görün</li>
+                        <li>İndirilmiş dosyalar yeşil, yeni dosyalar mavi renkle işaretlenir</li>
+                        <li>Dosya boyutu ve yüklenme tarihini görün</li>
+                        <li>SQLite database ile güvenilir kayıt tutma</li>
+                    </ul>
+                </div>
+                
+                <!-- Feature 4: Esnek İndirme -->
+                <div class="feature-card">
+                    <div class="feature-icon bg-yellow-100 text-yellow-600">
+                        ⚡
+                    </div>
+                    <h3 class="feature-title">Esnek İndirme Seçenekleri</h3>
+                    <ul class="feature-list">
+                        <li><strong>Tek Dosya:</strong> Bir dosyayı hızlıca indirin</li>
+                        <li><strong>Çoklu Seçim:</strong> İstediğiniz dosyaları seçip toplu indirin</li>
+                        <li><strong>Tümünü İndir:</strong> Tüm yeni dosyaları tek tıkla indirin</li>
+                        <li><strong>Progress Tracking:</strong> İndirme ilerlemesini gerçek zamanlı takip edin</li>
+                    </ul>
+                </div>
+                
+                <!-- Feature 5: Modern Arayüz -->
+                <div class="feature-card">
+                    <div class="feature-icon bg-pink-100 text-pink-600">
+                        🎨
+                    </div>
+                    <h3 class="feature-title">Modern Arayüz</h3>
+                    <ul class="feature-list">
+                        <li>Sezgisel ve kullanıcı dostu tasarım</li>
+                        <li>Responsive layout (her ekran boyutuna uyumlu)</li>
+                        <li>Material Design ilkelerine uygun</li>
+                        <li>Smooth animasyonlar ve geçişler</li>
+                    </ul>
+                </div>
+                
+                <!-- Feature 6: Tema Desteği -->
+                <div class="feature-card">
+                    <div class="feature-icon bg-indigo-100 text-indigo-600">
+                        🌙
+                    </div>
+                    <h3 class="feature-title">Tema Desteği</h3>
+                    <ul class="feature-list">
+                        <li><strong>Light Mode:</strong> Gündüz kullanımı için aydınlık tema</li>
+                        <li><strong>Dark Mode:</strong> Göz yormayan koyu tema</li>
+                        <li><strong>Sistem Teması:</strong> İşletim sisteminizin temasını otomatik takip edin</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Download Section -->
+    <section id="download" class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="section-title">İndirin</h2>
+                <p class="section-subtitle">Platformunuzu seçin ve indirmeye başlayın</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Windows Download -->
+                <div class="download-card">
+                    <div class="download-icon">
+                        <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+                        </svg>
+                    </div>
+                    <h3 class="download-title">Windows</h3>
+                    <p class="download-desc">Windows 10 ve üzeri (x64)</p>
+                    <div class="mt-6 space-y-3">
+                        <a href="downloads/BeeLocal-Setup-1.0.0-win-x64.exe" class="download-btn" download>
+                            Setup (.exe)
+                        </a>
+                        <a href="downloads/BeeLocal-Portable-1.0.0-win-x64.exe" class="download-btn-outline" download>
+                            Portable (.exe)
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- macOS Download -->
+                <div class="download-card">
+                    <div class="download-icon">
+                        <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                    </div>
+                    <h3 class="download-title">macOS</h3>
+                    <p class="download-desc">macOS 10.13 ve üzeri</p>
+                    <div class="mt-6 space-y-3">
+                        <a href="downloads/BeeLocal-1.0.0-arm64.dmg?v=1.0.0" class="download-btn" download>
+                            Apple Silicon (.dmg)
+                        </a>
+                        <details class="install-instructions">
+                            <summary class="download-btn-outline cursor-pointer flex items-center justify-center">
+                                <span>📖 Kurulum Talimatları</span>
+                                <svg class="w-5 h-5 ml-2 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </summary>
+                            <div class="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                <div class="space-y-3">
+                                    <div>
+                                        <p class="text-sm text-gray-700 mb-2">1. DMG dosyasını açın ve <strong>BeeLocal.app</strong>'i <strong>Applications</strong> klasörüne sürükleyin.</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-700 mb-2">2. Terminal'i açın ve aşağıdaki komutu çalıştırın:</p>
+                                        <div class="command-wrapper mt-2">
+                                            <div class="command-header">
+                                                <div class="command-title">
+                                                    <span class="command-dot command-dot--red"></span>
+                                                    <span class="command-dot command-dot--yellow"></span>
+                                                    <span class="command-dot command-dot--green"></span>
+                                                    <span class="command-label">Terminal</span>
+                                                </div>
+                                                <button onclick="copyMacCommand(event)" class="command-copy-btn" type="button">
+                                                    <svg class="command-copy-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                                        <path d="M8 8V5a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-3v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V11a3 3 0 0 1 3-3h3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M8 8h8a2 2 0 0 1 2 2v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    <span>Kopyala</span>
+                                                </button>
+                                            </div>
+                                            <pre id="mac-command" class="command-text select-all" aria-label="Terminal komutu">xattr -cr /Applications/BeeLocal.app && open /Applications/BeeLocal.app</pre>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600">3. Uygulama otomatik olarak açılacaktır. 🎉</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+                
+                <!-- Linux Download -->
+                <div class="download-card">
+                    <div class="download-icon">
+                        <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489.035.230.05.479.153.687.232.475.652.848 1.182.99.045.012.09.016.134.016 2.096 0 4.794-4.174 5.763-5.995.189-.355.346-.709.473-1.058.195-.538.28-1.05.28-1.596 0-.36-.05-.717-.14-1.068-.202-.788-.602-1.462-1.152-1.948-.13-.113-.265-.22-.402-.322l-.045-.03c.03-.02.06-.04.09-.06.495-.293.945-.656 1.35-1.068.51-.514.89-1.08 1.125-1.68.38-.97.38-2.01.18-2.98-.25-1.19-.97-2.35-2.09-3.07-1.1-.71-2.51-1.07-3.99-1.07zm-.25 1.01c1.2 0 2.33.29 3.22.85.89.56 1.49 1.38 1.68 2.31.19.93.12 1.85-.18 2.66-.19.5-.48.95-.84 1.33-.36.38-.79.68-1.26.92-.47.24-.97.4-1.49.49-.52.09-1.05.13-1.57.13-.52 0-1.05-.04-1.57-.13-.52-.09-1.02-.25-1.49-.49-.47-.24-.9-.54-1.26-.92-.36-.38-.65-.83-.84-1.33-.3-.81-.37-1.73-.18-2.66.19-.93.79-1.75 1.68-2.31.89-.56 2.02-.85 3.22-.85z"/>
+                        </svg>
+                    </div>
+                    <h3 class="download-title">Linux</h3>
+                    <p class="download-desc">Ubuntu 18.04 ve üzeri (x64)</p>
+                    <div class="mt-6 space-y-3">
+                        <a href="downloads/BeeLocal-1.0.0-linux-x64.AppImage" class="download-btn" download>
+                            AppImage (.AppImage)
+                        </a>
+                        <a href="downloads/BeeLocal-1.0.0-linux-amd64.deb" class="download-btn-outline" download>
+                            Debian (.deb)
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- System Requirements -->
+            <div class="mt-16 max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Sistem Gereksinimleri</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">Minimum</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• RAM: 4GB</li>
+                            <li>• Disk: 500MB boş alan</li>
+                            <li>• İnternet bağlantısı</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">Önerilen</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• RAM: 8GB</li>
+                            <li>• Disk: 1GB boş alan</li>
+                            <li>• Hızlı internet bağlantısı</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Use Section -->
+    <section id="how-to-use" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="section-title">Nasıl Kullanılır?</h2>
+                <p class="section-subtitle">3 adımda başlayın</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto space-y-12">
+                <!-- Step 1 -->
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="step-number">1</div>
+                    <div class="flex-1">
+                        <h3 class="step-title">Uygulamayı İndirin ve Kurun</h3>
+                        <p class="step-desc">
+                            Yukarıdaki bölümden işletim sisteminize uygun kurulum dosyasını indirin. 
+                            İndirme tamamlandıktan sonra dosyayı açın ve kurulum adımlarını takip edin.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="step-number">2</div>
+                    <div class="flex-1">
+                        <h3 class="step-title">Giriş Yapın</h3>
+                        <p class="step-desc">
+                            Uygulamayı açın ve İTÜ kullanıcı adı ve şifrenizi girin. "Beni Hatırla" 
+                            seçeneğini işaretleyerek bir sonraki açılışlarda otomatik giriş yapabilirsiniz. 
+                            Şifreleriniz güvenli şekilde şifrelenir.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="step-number">3</div>
+                    <div class="flex-1">
+                        <h3 class="step-title">Dosyalarınızı İndirin</h3>
+                        <p class="step-desc">
+                            Sol panelden bir ders seçin. Sağ panelde o derse ait tüm dosyaları göreceksiniz. 
+                            İndirilmemiş dosyalar mavi renkle işaretlidir. Tek dosya veya toplu indirme 
+                            seçeneklerinden birini kullanarak dosyalarınızı kolayca indirin.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="section-title">Sıkça Sorulan Sorular</h2>
+                <p class="section-subtitle">Merak ettikleriniz</p>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- FAQ 1 -->
+                <div class="faq-card">
+                    <h3 class="faq-question">BeeLocal resmi bir İTÜ uygulaması mı?</h3>
+                    <p class="faq-answer">
+                        Hayır, BeeLocal resmi bir İTÜ uygulaması değildir. Öğrenciler tarafından, 
+                        öğrencilerin hayatını kolaylaştırmak için geliştirilmiş açık kaynak kodlu bir projedir.
+                    </p>
+                </div>
+                
+                <!-- FAQ 2 -->
+                <div class="faq-card">
+                    <h3 class="faq-question">Şifrelerim güvende mi?</h3>
+                    <p class="faq-answer">
+                        Evet! Şifreleriniz Electron'un safeStorage API'si ile güvenle şifrelenir ve 
+                        sadece sizin bilgisayarınızda saklanır. Hiçbir veri dışarıya gönderilmez.
+                    </p>
+                </div>
+                
+                <!-- FAQ 3 -->
+                <div class="faq-card">
+                    <h3 class="faq-question">Hangi platformlarda çalışır?</h3>
+                    <p class="faq-answer">
+                        BeeLocal, Windows 10 ve üzeri, macOS 10.13 (High Sierra) ve üzeri, 
+                        ve Ubuntu 18.04 veya eşdeğeri Linux dağıtımlarında çalışır.
+                    </p>
+                </div>
+                
+                <!-- FAQ 4 -->
+                <div class="faq-card">
+                    <h3 class="faq-question">İndirilen dosyalar nereye kaydedilir?</h3>
+                    <p class="faq-answer">
+                        Varsayılan olarak İndirilenler klasörünüze kaydedilir. Ayarlar sayfasından 
+                        dilediğiniz klasörü seçebilir ve klasör yapısını özelleştirebilirsiniz.
+                    </p>
+                </div>
+                
+                <!-- FAQ 5 -->
+                <div class="faq-card">
+                    <h3 class="faq-question">Otomatik güncelleme var mı?</h3>
+                    <p class="faq-answer">
+                        Evet! Uygulama yeni bir versiyon çıktığında sizi bilgilendirir. Güncellemeyi 
+                        tek tıkla indirebilir ve kurabilirsiniz.
+                    </p>
+                </div>
+                
+                <!-- FAQ 6 -->
+                <div class="faq-card">
+                    <h3 class="faq-question">Sorun yaşarsam ne yapmalıyım?</h3>
+                    <p class="faq-answer">
+                        <a href="https://github.com/YusufAlper17/BeeLocal/issues" target="_blank" class="text-blue-600 hover:text-blue-800 underline">GitHub sayfamızdaki Issues bölümünden</a> yeni bir issue açabilirsiniz. 
+                        Topluluk ve geliştiriciler size yardımcı olacaktır.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <!-- About -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <span class="text-2xl">🐝</span>
+                        <span class="text-xl font-bold text-white tracking-tight">BeeLocal</span>
+                    </div>
+                    <p class="text-sm">
+                        İTÜ Ninova için geliştirilmiş modern dosya senkronizasyon uygulaması. 
+                        Öğrenciler tarafından, öğrenciler için yapıldı.
+                    </p>
+                </div>
+                
+                <!-- Links -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Bağlantılar</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#features" class="hover:text-white transition-colors">Özellikler</a></li>
+                        <li><a href="#download" class="hover:text-white transition-colors">İndir</a></li>
+                        <li><a href="#how-to-use" class="hover:text-white transition-colors">Nasıl Kullanılır</a></li>
+                        <li><a href="#faq" class="hover:text-white transition-colors">SSS</a></li>
+                        <li><a href="https://github.com/YusufAlper17/BeeLocal" target="_blank" class="hover:text-white transition-colors">GitHub</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">İletişim</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://github.com/YusufAlper17/BeeLocal/issues" target="_blank" class="hover:text-white transition-colors">Hata Bildir</a></li>
+                        <li><a href="https://github.com/YusufAlper17/BeeLocal/issues" target="_blank" class="hover:text-white transition-colors">Özellik Öner</a></li>
+                        <li><a href="https://github.com/YusufAlper17/BeeLocal" target="_blank" class="hover:text-white transition-colors">Katkıda Bulun</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Bottom -->
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                    <p class="text-sm">
+                        © 2024 BeeLocal. Tüm hakları saklıdır. 
+                        <a href="https://github.com/YusufAlper17/BeeLocal/blob/main/LICENSE" target="_blank" class="hover:text-white transition-colors">MIT Lisansı</a>
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        Made with ❤️ by İTÜ Students
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+        </svg>
+    </button>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
+

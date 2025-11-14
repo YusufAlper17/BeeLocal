@@ -1,0 +1,134 @@
+{
+  "name": "beelocal",
+  "version": "1.0.0",
+  "description": "İTÜ Ninova dosya senkronizasyon uygulaması",
+  "main": "dist-electron/main.js",
+  "type": "module",
+  "author": {
+    "name": "BeeLocal Team",
+    "email": "support@beelocal.app"
+  },
+  "homepage": "https://beelocal.app",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run prepare-icons && tsc && vite build && electron-builder",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "electron:dev": "npm run prepare-icons && concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "npm run prepare-icons && vite build && electron-builder",
+    "electron:build:fast": "npm run prepare-icons && vite build && electron-builder --mac --arm64 --dir",
+    "prepare-icons": "node scripts/prepare-icons.cjs",
+    "round-icon-corners": "node scripts/round-icon-corners.cjs",
+    "clear-icon-cache": "node scripts/clear-icon-cache.cjs",
+    "landing": "python3 -m http.server 8000 --directory docs"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0",
+    "puppeteer": "^23.11.1",
+    "puppeteer-core": "^23.11.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
+    "sql.js": "^1.10.3",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@types/sql.js": "^1.4.9",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "concurrently": "^8.2.2",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "to-ico": "^1.1.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8",
+    "vite-plugin-electron": "^0.28.0",
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.beelocal.app",
+    "productName": "BeeLocal",
+    "mac": {
+      "category": "public.app-category.education",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "identity": null,
+      "gatekeeperAssess": false,
+      "hardenedRuntime": false,
+      "icon": "build/icon.icns",
+      "fileAssociations": [],
+      "type": "distribution"
+    },
+    "dmg": {
+      "icon": "build/icon.icns",
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 230,
+          "y": 250,
+          "type": "file"
+        },
+        {
+          "x": 500,
+          "y": 250,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 730,
+        "height": 470
+      }
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "maintainer": "BeeLocal Team <support@beelocal.app>",
+      "icon": "build/icon.png"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "electron/preload.cjs",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "build/icon.icns",
+        "to": "icon.icns"
+      },
+      {
+        "from": "build/icon.ico",
+        "to": "icon.ico"
+      },
+      {
+        "from": "build/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "directories": {
+      "output": "release"
+    }
+  }
+}

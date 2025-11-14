@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeeLocal - Kurulum Talimatları</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">🐝</div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">İndirme Başarılı!</h1>
+                <p class="text-gray-600">BeeLocal'i kurmak için aşağıdaki adımları izleyin</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Step 1 -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">1</div>
+                        <div class="flex-1 install-step">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">DMG Dosyasını Aç</h3>
+                            <p class="text-gray-700 mb-2">İndirilen <code>BeeLocal-1.0.0-arm64.dmg</code> dosyasına çift tıklayın. Disk görüntüsü otomatik olarak bağlanır.</p>
+                            <p class="text-sm text-gray-600">💡 Eğer ZIP dosyasını indirdiyseniz (<code>BeeLocal-1.0.0-arm64-mac.zip</code>), önce arşivden çıkarın; ardından aynı adımları izleyin.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">2</div>
+                        <div class="flex-1 install-step">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Applications'a Taşı</h3>
+                            <p class="text-gray-700 mb-2">Açılan DMG penceresindeki <strong>BeeLocal.app</strong> simgesini <strong>Applications</strong> klasörüne sürükleyin.</p>
+                            <p class="text-sm text-gray-600">⚠️ Sürükle-bırak işlemi tamamlanmadan DMG'yi çıkarmayın.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 - Terminal Komutu -->
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-yellow-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">3</div>
+                        <div class="flex-1 install-step">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Terminal Komutunu Çalıştır</h3>
+                            <p class="text-gray-700 mb-3">Terminal uygulamasını açın (⌘+Space → "Terminal" yazın) ve şu komutu yapıştırıp Enter'a basın:</p>
+                            <div class="command-wrapper" role="group" aria-labelledby="command-title">
+                                <div class="command-header">
+                                    <div class="command-title" id="command-title">
+                                        <span class="command-dot command-dot--red"></span>
+                                    <span class="command-dot command-dot--yellow"></span>
+                                    <span class="command-dot command-dot--green"></span>
+                                        <span class="command-label">Terminal</span>
+                                    </div>
+                                    <button onclick="copyCommand(event)" class="command-copy-btn" type="button">
+                                        <svg class="command-copy-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M8 8V5a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-3v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V11a3 3 0 0 1 3-3h3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M8 8h8a2 2 0 0 1 2 2v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span>Kopyala</span>
+                                    </button>
+                                </div>
+                                <pre id="command" class="command-text select-all" aria-label="Terminal komutu">xattr -cr /Applications/BeeLocal.app && open /Applications/BeeLocal.app</pre>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-2">
+                                ⚠️ Bu komut Gatekeeper karantinasını kaldırır ve uygulamayı açar.<br>
+                                ✅ Komut tamamlandıktan sonra Terminal “quarantine kaldırıldı” mesajı gösterir.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-purple-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">4</div>
+                        <div class="flex-1 install-step">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Uygulamayı Başlat</h3>
+                            <p class="text-gray-700">Applications klasöründen <strong>BeeLocal</strong> uygulamasını açın ve kullanmaya başlayın! 🎉</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alternative Method -->
+            <div class="mt-8 border-t pt-6">
+                <details class="cursor-pointer">
+                    <summary class="text-lg font-semibold text-gray-900 mb-2">Alternatif Yöntem (Terminal kullanmadan)</summary>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700 mt-4">
+                        <li>Applications klasöründeki BeeLocal.app'e <strong>sağ tık</strong> yapın</li>
+                        <li><strong>"Aç"</strong> seçeneğine tıklayın</li>
+                        <li>Çıkan uyarıda <strong>"Aç"</strong> butonuna basın</li>
+                        <li>Sistem Ayarları → Gizlilik ve Güvenlik'ten de izin verebilirsiniz</li>
+                    </ol>
+                </details>
+            </div>
+
+            <!-- Back Button -->
+            <div class="mt-8 text-center">
+                <a href="index.html" class="inline-block bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all">
+                    ← Ana Sayfaya Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyCommand(evt) {
+            const command = document.getElementById('command').textContent.trim();
+            navigator.clipboard.writeText(command).then(() => {
+                const btn = evt.currentTarget || evt.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Kopyalandı!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+        
+        // Auto-open terminal instructions
+        window.addEventListener('load', function() {
+            const commandEl = document.getElementById('command');
+            commandEl.addEventListener('click', function() {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(commandEl);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            });
+        });
+    </script>
+</body>
+</html>
+

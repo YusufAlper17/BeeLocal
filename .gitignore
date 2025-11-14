@@ -1,0 +1,68 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+build.log
+
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+dist-electron
+release
+build
+out
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment
+.env
+.env.local
+.env.*
+!.env.example
+*.local
+
+# Large binary files in docs (should be in GitHub Releases, not in repo)
+docs/downloads/
+docs/**/*.dmg
+docs/**/*.zip
+docs/**/*.deb
+docs/**/*.AppImage
+docs/**/*.exe
+docs/**/*.blockmap
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
