@@ -66,3 +66,31 @@ $RECYCLE.BIN/
 *~
 .directory
 .Trash-*
+
+# Debug and report files (development only, not needed in production)
+*DEBUG*.md
+*REPORT*.md
+ICON_DEBUG_REPORT.md
+builder-debug.yml
+
+# Development/test files
+*_yeni.*
+*_new.*
+*_test.*
+*_temp.*
+*.py
+!requirements.txt
+!setup.py
+
+# Duplicate script files (keep .cjs versions, ignore old .js versions)
+scripts/prepare-icons.js
+scripts/clear-icon-cache.js
+
+# Build helper files (not needed in repo)
+build/create-ico.js
+build/bee-icon.svg
+build/*.svg
+
+# Development documentation (not needed in production repo)
+docs/ICON_FIX.md
+docs/ICON_MANAGEMENT.md

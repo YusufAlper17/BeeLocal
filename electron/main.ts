@@ -12,22 +12,42 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 let mainWindow: BrowserWindow | null = null
 let appIcon: Electron.NativeImage | undefined
 
+// Development modu kontrolü
+const isDev = !!process.env.VITE_DEV_SERVER_URL
+
+// Debug helper fonksiyonları - sadece development'ta log yaz
+const debugLog = (...args: any[]) => {
+  if (isDev) {
+    console.log(...args)
+  }
+}
+
+const debugWarn = (...args: any[]) => {
+  if (isDev) {
+    console.warn(...args)
+  }
+}
+
+// Hatalar her zaman loglanmalı
+const debugError = (...args: any[]) => {
+  console.error(...args)
+}
+
 const createWindow = () => {
   const preloadPath = path.join(__dirname, 'preload.cjs')
-  console.log('🔧 Preload path:', preloadPath)
+  debugLog('🔧 Preload path:', preloadPath)
   
   // Icon path'ini belirle - tüm platformlar için development ve production
   let iconPath: string | undefined
   
   const getIconPath = (): string | undefined => {
-    const isDev = !!process.env.VITE_DEV_SERVER_URL
     const platform = process.platform
     
-    console.log('🔍 Icon arama başlatılıyor...')
-    console.log('   Platform:', platform)
-    console.log('   Mod:', isDev ? 'Development' : 'Production')
-    console.log('   __dirname:', __dirname)
-    console.log('   process.cwd():', process.cwd())
+    debugLog('🔍 Icon arama başlatılıyor...')
+    debugLog('   Platform:', platform)
+    debugLog('   Mod:', isDev ? 'Development' : 'Production')
+    debugLog('   __dirname:', __dirname)
+    debugLog('   process.cwd():', process.cwd())
     
     // Platform'a göre icon uzantısını belirle
     let iconExt: string
@@ -40,7 +60,7 @@ const createWindow = () => {
       iconExt = 'png'
     }
     
-    console.log('   Aranan icon dosyası: icon.' + iconExt)
+    debugLog('   Aranan icon dosyası: icon.' + iconExt)
     
     // Olası icon path'lerini belirle
     const possiblePaths: string[] = []
@@ -81,7 +101,7 @@ const createWindow = () => {
             path.join(resourcesDir, 'icon.' + iconExt) // resources/icon.ico (DOĞRU KONUM)
           )
         } catch (e) {
-          console.warn('getPath("exe") çalışmadı:', e)
+          debugWarn('getPath("exe") çalışmadı:', e)
           // Fallback: app.asar'ın üst dizini
           possiblePaths.push(
             path.join(appPath, '..', 'icon.' + iconExt)
@@ -100,7 +120,7 @@ const createWindow = () => {
             path.join(resourcesDir, 'icon.' + iconExt) // resources/icon.png (DOĞRU KONUM)
           )
         } catch (e) {
-          console.warn('getPath("exe") çalışmadı:', e)
+          debugWarn('getPath("exe") çalışmadı:', e)
           // Fallback: app.asar'ın üst dizini
           possiblePaths.push(
             path.join(appPath, '..', 'icon.' + iconExt)
@@ -118,18 +138,18 @@ const createWindow = () => {
     // İlk bulunan geçerli path'i döndür
     for (const possiblePath of possiblePaths) {
       if (fs.existsSync(possiblePath)) {
-        console.log('✅ Icon bulundu:', possiblePath)
+        debugLog('✅ Icon bulundu:', possiblePath)
         return possiblePath
       }
     }
     
     // Icon bulunamadıysa log yaz ama uygulama çalışmaya devam etsin
-    console.warn('⚠️ Icon dosyası bulunamadı. Olası path\'ler denenmiş:')
+    debugWarn('⚠️ Icon dosyası bulunamadı. Olası path\'ler denenmiş:')
     possiblePaths.forEach(p => {
       try {
-        console.warn('  -', p, fs.existsSync(p) ? '(MEVCUT)' : '(YOK)')
+        debugWarn('  -', p, fs.existsSync(p) ? '(MEVCUT)' : '(YOK)')
       } catch {
-        console.warn('  -', p, '(KONTROL EDİLEMEDİ)')
+        debugWarn('  -', p, '(KONTROL EDİLEMEDİ)')
       }
     })
     
@@ -139,62 +159,62 @@ const createWindow = () => {
   iconPath = getIconPath()
   
   // Icon'u native image olarak yükle
-  console.log('📦 Icon yükleme işlemi başlatılıyor...')
-  console.log('   Icon path:', iconPath || '(BULUNAMADI)')
+  debugLog('📦 Icon yükleme işlemi başlatılıyor...')
+  debugLog('   Icon path:', iconPath || '(BULUNAMADI)')
   
   if (iconPath) {
     try {
       // Dosya varlığını tekrar kontrol et
       if (!fs.existsSync(iconPath)) {
-        console.error('❌ Icon dosyası bulunamadı (path kontrolü):', iconPath)
+        debugError('❌ Icon dosyası bulunamadı (path kontrolü):', iconPath)
         appIcon = undefined
       } else {
         const stats = fs.statSync(iconPath)
-        console.log('   Dosya boyutu:', stats.size, 'bytes')
-        console.log('   Dosya modu:', stats.mode.toString(8))
+        debugLog('   Dosya boyutu:', stats.size, 'bytes')
+        debugLog('   Dosya modu:', stats.mode.toString(8))
         
         appIcon = nativeImage.createFromPath(iconPath)
         
         if (appIcon.isEmpty()) {
-          console.error('❌ Icon dosyası boş veya okunamadı:', iconPath)
-          console.error('   Dosya var ama içerik okunamıyor. Format kontrolü yapın.')
+          debugError('❌ Icon dosyası boş veya okunamadı:', iconPath)
+          debugError('   Dosya var ama içerik okunamıyor. Format kontrolü yapın.')
           appIcon = undefined
         } else {
           const iconSize = appIcon.getSize()
-          console.log('✅ Icon başarıyla yüklendi:', iconPath)
-          console.log('   Icon boyutu:', iconSize.width + 'x' + iconSize.height)
-          console.log('   Icon scale factors:', appIcon.getScaleFactors())
+          debugLog('✅ Icon başarıyla yüklendi:', iconPath)
+          debugLog('   Icon boyutu:', iconSize.width + 'x' + iconSize.height)
+          debugLog('   Icon scale factors:', appIcon.getScaleFactors())
           
           // macOS için Dock icon'unu ayarla
           if (process.platform === 'darwin' && app.dock) {
             try {
               app.dock.setIcon(appIcon)
-              console.log('🎨 macOS Dock icon ayarlandı')
+              debugLog('🎨 macOS Dock icon ayarlandı')
               
               // Icon'un gerçekten ayarlandığını doğrula
               const dockIcon = app.dock.getBadge()
-              console.log('   Dock badge:', dockIcon || '(yok)')
+              debugLog('   Dock badge:', dockIcon || '(yok)')
             } catch (error) {
-              console.error('❌ Dock icon ayarlanamadı:', error)
+              debugError('❌ Dock icon ayarlanamadı:', error)
               if (error instanceof Error) {
-                console.error('   Hata mesajı:', error.message)
-                console.error('   Stack:', error.stack)
+                debugError('   Hata mesajı:', error.message)
+                debugError('   Stack:', error.stack)
               }
             }
           }
         }
       }
     } catch (error) {
-      console.error('❌ Icon yüklenirken hata:', error)
+      debugError('❌ Icon yüklenirken hata:', error)
       if (error instanceof Error) {
-        console.error('   Hata mesajı:', error.message)
-        console.error('   Stack:', error.stack)
+        debugError('   Hata mesajı:', error.message)
+        debugError('   Stack:', error.stack)
       }
       appIcon = undefined
     }
   } else {
-    console.warn('⚠️ Icon path bulunamadı, default icon kullanılacak')
-    console.warn('   Bu durumda Electron default icon\'u gösterilecek')
+    debugWarn('⚠️ Icon path bulunamadı, default icon kullanılacak')
+    debugWarn('   Bu durumda Electron default icon\'u gösterilecek')
   }
   
   // BrowserWindow için icon ayarı
@@ -218,51 +238,52 @@ const createWindow = () => {
   // Icon varsa ekle
   if (appIcon) {
     windowOptions.icon = appIcon
-    console.log('🪟 BrowserWindow icon ayarlandı')
+    debugLog('🪟 BrowserWindow icon ayarlandı')
   } else {
-    console.warn('⚠️ BrowserWindow icon ayarlanmadı (appIcon yok)')
+    debugWarn('⚠️ BrowserWindow icon ayarlanmadı (appIcon yok)')
   }
   
-  console.log('🪟 BrowserWindow oluşturuluyor...')
-  console.log('   Icon kullanılıyor:', !!windowOptions.icon)
+  debugLog('🪟 BrowserWindow oluşturuluyor...')
+  debugLog('   Icon kullanılıyor:', !!windowOptions.icon)
   
   mainWindow = new BrowserWindow(windowOptions)
 
   // Development modunda localhost, production'da dosya
-  if (process.env.VITE_DEV_SERVER_URL) {
-    console.log('🛠️ Development modu: URL yükleniyor');
-    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL)
-      .then(() => console.log('✅ Dev URL başarıyla yüklendi'))
-      .catch(err => console.error('❌ Dev URL yükleme hatası:', err));
+  if (isDev) {
+    debugLog('🛠️ Development modu: URL yükleniyor');
+    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL!)
+      .then(() => debugLog('✅ Dev URL başarıyla yüklendi'))
+      .catch(err => debugError('❌ Dev URL yükleme hatası:', err));
+    // Development'ta DevTools aç
     mainWindow.webContents.openDevTools()
   } else {
     // Production build için doğru yolu kullan
     // app.getAppPath() packaged app'te doğru resource path'i verir
     const appPath = app.getAppPath()
     const indexPath = path.join(appPath, 'dist/index.html')
-    console.log('📂 App path:', appPath)
-    console.log('📄 Index path:', indexPath)
+    debugLog('📂 App path:', appPath)
+    debugLog('📄 Index path:', indexPath)
     if (!fs.existsSync(indexPath)) {
-      console.error('❌ Index.html dosyası bulunamadı:', indexPath);
+      debugError('❌ Index.html dosyası bulunamadı:', indexPath);
     }
     mainWindow.loadFile(indexPath, { hash: '/login' })
-      .then(() => console.log('✅ Production index.html başarıyla yüklendi'))
-      .catch(err => console.error('❌ Production yükleme hatası:', err));
-    mainWindow.webContents.openDevTools();  // Teşhis için production'da da DevTools aç
+      .then(() => debugLog('✅ Production index.html başarıyla yüklendi'))
+      .catch(err => debugError('❌ Production yükleme hatası:', err));
+    // Production'da DevTools AÇILMAYACAK
   }
   
   // Preload script yüklendiğinde log
   mainWindow.webContents.on('did-finish-load', () => {
-    console.log('✅ Sayfa yüklendi, Electron API hazır olmalı');
-    // Renderer'a test mesajı gönder
-    if (mainWindow) {
+    debugLog('✅ Sayfa yüklendi, Electron API hazır olmalı');
+    // Renderer'a test mesajı gönder (sadece development'ta)
+    if (mainWindow && isDev) {
       mainWindow.webContents.send('test-renderer', 'Renderer çalışıyor mu?');
     }
   })
 
   // Renderer'dan gelen mesajları dinle
   ipcMain.on('test-main', (_event, message) => {
-    console.log('📩 Renderer\'dan mesaj alındı:', message);
+    debugLog('📩 Renderer\'dan mesaj alındı:', message);
   });
 
   mainWindow.once('ready-to-show', () => {
@@ -270,9 +291,9 @@ const createWindow = () => {
     if (process.platform === 'darwin' && appIcon && app.dock) {
       try {
         app.dock.setIcon(appIcon)
-        console.log('🔄 Window hazır - Dock icon tekrar ayarlandı')
+        debugLog('🔄 Window hazır - Dock icon tekrar ayarlandı')
       } catch (error) {
-        console.error('❌ Window ready - Dock icon ayarlanamadı:', error)
+        debugError('❌ Window ready - Dock icon ayarlanamadı:', error)
       }
     }
     mainWindow?.show()
@@ -284,11 +305,11 @@ const createWindow = () => {
 }
 
 app.whenReady().then(async () => {
-  console.log('🚀 App hazır, başlatılıyor...')
-  console.log('   Platform:', process.platform)
-  console.log('   App path:', app.getAppPath())
-  console.log('   App name:', app.getName())
-  console.log('   App version:', app.getVersion())
+  debugLog('🚀 App hazır, başlatılıyor...')
+  debugLog('   Platform:', process.platform)
+  debugLog('   App path:', app.getAppPath())
+  debugLog('   App name:', app.getName())
+  debugLog('   App version:', app.getVersion())
   
   // Database'i başlat
   await databaseService.initialize()
@@ -297,15 +318,15 @@ app.whenReady().then(async () => {
   
   // Icon durumunu doğrula
   if (process.platform === 'darwin' && app.dock) {
-    console.log('🔍 Dock icon durumu kontrol ediliyor...')
+    debugLog('🔍 Dock icon durumu kontrol ediliyor...')
     // Dock icon'u tekrar ayarla (bazı durumlarda gecikmeli yüklenebilir)
     setTimeout(() => {
       if (appIcon && app.dock) {
         try {
           app.dock.setIcon(appIcon)
-          console.log('✅ Dock icon tekrar ayarlandı (gecikmeli)')
+          debugLog('✅ Dock icon tekrar ayarlandı (gecikmeli)')
         } catch (error) {
-          console.error('❌ Gecikmeli dock icon ayarı başarısız:', error)
+          debugError('❌ Gecikmeli dock icon ayarı başarısız:', error)
         }
       }
     }, 1000)

@@ -45,15 +45,15 @@ function updatePrimaryDownloadButton() {
     const downloadLinks = {
         'macOS': {
             text: 'macOS için İndir',
-            url: 'downloads/BeeLocal-1.0.0-arm64.dmg?v=1.0.0'
+            url: 'https://github.com/YusufAlper17/BeeLocal/releases/download/v1.0.0/BeeLocal-1.0.0-arm64.dmg'
         },
         'Windows': {
             text: 'Windows için İndir',
-            url: 'downloads/BeeLocal-Setup-1.0.0-win-x64.exe'
+            url: 'https://github.com/YusufAlper17/BeeLocal/releases/download/v1.0.0/BeeLocal-Setup-1.0.0-win-x64.exe'
         },
         'Linux': {
             text: 'Linux için İndir',
-            url: 'downloads/BeeLocal-1.0.0-linux-x64.AppImage'
+            url: 'https://github.com/YusufAlper17/BeeLocal/releases/download/v1.0.0/BeeLocal-1.0.0-linux-x64.AppImage'
         },
         'unknown': {
             text: 'İndir',
