@@ -201,18 +201,31 @@ jobs:
         run: |
           mkdir -p release-files
           
+          echo "📦 Artifacts yapısı:"
+          find artifacts -type f -name "*" | head -20
+          
           # macOS files
-          find artifacts/mac-arm64 -name "*.dmg" -o -name "*.zip" | xargs -I {} cp {} release-files/ 2>/dev/null || true
-          find artifacts/mac-x64 -name "*.dmg" -o -name "*.zip" | xargs -I {} cp {} release-files/ 2>/dev/null || true
+          echo "🍎 macOS ARM64 dosyaları aranıyor..."
+          find artifacts/mac-arm64 -type f \( -name "*.dmg" -o -name "*.zip" \) -exec cp {} release-files/ \;
+          
+          echo "🍎 macOS x64 dosyaları aranıyor..."
+          find artifacts/mac-x64 -type f \( -name "*.dmg" -o -name "*.zip" \) -exec cp {} release-files/ \;
           
           # Windows files
-          find artifacts/win-x64 -name "*.exe" | xargs -I {} cp {} release-files/ 2>/dev/null || true
+          echo "🪟 Windows dosyaları aranıyor..."
+          find artifacts/win-x64 -type f -name "*.exe" -exec cp {} release-files/ \;
           
           # Linux files
-          find artifacts/linux-x64 -name "*.AppImage" -o -name "*.deb" | xargs -I {} cp {} release-files/ 2>/dev/null || true
+          echo "🐧 Linux dosyaları aranıyor..."
+          find artifacts/linux-x64 -type f \( -name "*.AppImage" -o -name "*.deb" \) -exec cp {} release-files/ \;
           
-          echo "Release files prepared:"
+          echo "✅ Release dosyaları hazırlandı:"
           ls -lh release-files/
+          
+          if [ ! "$(ls -A release-files)" ]; then
+            echo "❌ HATA: Release klasörü boş!"
+            exit 1
+          fi
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -245,6 +258,7 @@ jobs:
           files: release-files/*
           draft: false
           prerelease: false
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
