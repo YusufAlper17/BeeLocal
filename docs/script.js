@@ -56,17 +56,16 @@ async function getLatestReleaseVersion() {
 // ==================== Update Download Links ====================
 async function updateDownloadLinks() {
     const { version, tag } = await getLatestReleaseVersion();
-    const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/latest/download`;
+    const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/download/${tag}`;
     
     // Update all download links on the page
-    const links = document.querySelectorAll('a[href*="releases/download"], a[href*="releases/latest"]');
+    const links = document.querySelectorAll('a[href*="releases/download"]');
     links.forEach(link => {
         const href = link.getAttribute('href');
-        if (href && (href.includes('1.0.0') || href.includes('1.0.1'))) {
-            // Replace version in URL with latest
+        if (href) {
+            // Replace version in URL with latest tag
             const newHref = href.replace(/\/releases\/download\/v[\d.]+/, baseUrl)
-                                 .replace(/\/releases\/latest\/download\/BeeLocal-[\d.]+/, `${baseUrl}/BeeLocal-${version}`)
-                                 .replace(/BeeLocal-[\d.]+-/, `BeeLocal-${version}-`);
+                                 .replace(/BeeLocal-[\d.]+(-[a-z0-9]+)?\./, `BeeLocal-${version}$1.`);
             link.setAttribute('href', newHref);
         }
     });
@@ -83,7 +82,7 @@ function updatePrimaryDownloadButton() {
     
     // Get latest release version
     getLatestReleaseVersion().then(({ version, tag }) => {
-        const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/latest/download`;
+        const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/download/${tag}`;
         
         const downloadLinks = {
             'macOS': {
