@@ -16,6 +16,9 @@ dist
 dist-electron
 release
 build
+!build/icon.icns
+!build/icon.ico
+!build/icon.png
 out
 
 # Editor directories and files

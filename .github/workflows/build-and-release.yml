@@ -29,7 +29,13 @@ jobs:
           mkdir -p build
 
       - name: Prepare icons
-        run: npm run prepare-icons
+        shell: bash
+        run: |
+          if [ ! -f "build/icon.ico" ] || [ ! -f "build/icon.icns" ] || [ ! -f "build/icon.png" ]; then
+            npm run prepare-icons
+          else
+            echo "✅ Icon files already exist, skipping preparation"
+          fi
 
       - name: Build TypeScript
         run: npx tsc
@@ -72,7 +78,13 @@ jobs:
           mkdir -p build
 
       - name: Prepare icons
-        run: npm run prepare-icons
+        shell: bash
+        run: |
+          if [ ! -f "build/icon.ico" ] || [ ! -f "build/icon.icns" ] || [ ! -f "build/icon.png" ]; then
+            npm run prepare-icons
+          else
+            echo "✅ Icon files already exist, skipping preparation"
+          fi
 
       - name: Build TypeScript
         run: npx tsc
@@ -126,7 +138,13 @@ jobs:
           mkdir -p build
 
       - name: Prepare icons
-        run: npm run prepare-icons
+        shell: bash
+        run: |
+          if [ ! -f "build/icon.ico" ] || [ ! -f "build/icon.icns" ] || [ ! -f "build/icon.png" ]; then
+            npm run prepare-icons
+          else
+            echo "✅ Icon files already exist, skipping preparation"
+          fi
 
       - name: Build TypeScript
         run: npx tsc
