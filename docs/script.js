@@ -45,31 +45,49 @@ async function getLatestReleaseVersion() {
         const data = await response.json();
         // Tag formatından versiyonu çıkar (örn: "v1.0.0" -> "1.0.0")
         const version = data.tag_name.replace(/^v/, '');
-        return { version, tag: data.tag_name };
+        // Asset'lerden dosya adlarını çıkar
+        const assets = data.assets || [];
+        const assetMap = {};
+        assets.forEach(asset => {
+            const name = asset.name;
+            // macOS - arm64 (Apple Silicon)
+            if (name.includes('arm64') && name.endsWith('.dmg')) {
+                assetMap['macos-arm64'] = name;
+            }
+            // macOS - x64 (Intel) - arm64 içermemeli ve .dmg olmalı
+            else if (name.endsWith('.dmg') && !name.includes('arm64') && (name.includes('x64') || name.includes('intel'))) {
+                assetMap['macos-x64'] = name;
+            }
+            // Windows Setup
+            else if (name.includes('Setup') && name.endsWith('.exe')) {
+                assetMap['windows-setup'] = name;
+            }
+            // Windows Portable
+            else if (name.includes('Portable') && name.endsWith('.exe')) {
+                assetMap['windows-portable'] = name;
+            }
+            // Linux AppImage
+            else if (name.endsWith('.AppImage')) {
+                assetMap['linux-appimage'] = name;
+            }
+            // Linux Debian package
+            else if (name.endsWith('.deb')) {
+                assetMap['linux-deb'] = name;
+            }
+        });
+        return { version, tag: data.tag_name, assets: assetMap };
     } catch (error) {
         console.warn('Latest release bilgisi alınamadı, varsayılan versiyon kullanılıyor:', error);
         // Fallback: package.json'dan veya varsayılan versiyon
-        return { version: '1.0.0', tag: 'v1.0.0' };
+        return { version: '1.0.0', tag: 'v1.0.0', assets: {} };
     }
 }
 
 // ==================== Update Download Links ====================
+// Bu fonksiyon artık kullanılmıyor, updateAllDownloadLinks kullanılıyor
 async function updateDownloadLinks() {
     const { version, tag } = await getLatestReleaseVersion();
     const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/download/${tag}`;
-    
-    // Update all download links on the page
-    const links = document.querySelectorAll('a[href*="releases/download"]');
-    links.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href) {
-            // Replace version in URL with latest tag
-            const newHref = href.replace(/\/releases\/download\/v[\d.]+/, baseUrl)
-                                 .replace(/BeeLocal-[\d.]+(-[a-z0-9]+)?\./, `BeeLocal-${version}$1.`);
-            link.setAttribute('href', newHref);
-        }
-    });
-    
     return { version, tag, baseUrl };
 }
 
@@ -81,21 +99,28 @@ function updatePrimaryDownloadButton() {
     if (!downloadBtn || !downloadText) return;
     
     // Get latest release version
-    getLatestReleaseVersion().then(({ version, tag }) => {
+    getLatestReleaseVersion().then(({ version, tag, assets }) => {
         const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/download/${tag}`;
         
+        // Asset'lerden dosya adlarını kullan, yoksa fallback
         const downloadLinks = {
             'macOS': {
                 text: 'macOS için İndir',
-                url: `${baseUrl}/BeeLocal-${version}-arm64.dmg`
+                url: assets['macos-arm64'] 
+                    ? `${baseUrl}/${assets['macos-arm64']}`
+                    : `${baseUrl}/BeeLocal-${version}-arm64.dmg`
             },
             'Windows': {
                 text: 'Windows için İndir',
-                url: `${baseUrl}/BeeLocal-Setup-${version}-win-x64.exe`
+                url: assets['windows-setup']
+                    ? `${baseUrl}/${assets['windows-setup']}`
+                    : `${baseUrl}/BeeLocal-Setup-${version}-win32-x64.exe`
             },
             'Linux': {
                 text: 'Linux için İndir',
-                url: `${baseUrl}/BeeLocal-${version}-linux-x64.AppImage`
+                url: assets['linux-appimage']
+                    ? `${baseUrl}/${assets['linux-appimage']}`
+                    : `${baseUrl}/BeeLocal-${version}-linux-x86_64.AppImage`
             },
             'unknown': {
                 text: 'İndir',
@@ -120,16 +145,29 @@ function updatePrimaryDownloadButton() {
 // ==================== Update Download Links Dynamically ====================
 async function updateAllDownloadLinks() {
     try {
-        const { version, tag, baseUrl } = await updateDownloadLinks();
+        const { version, tag, assets } = await getLatestReleaseVersion();
+        const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/download/${tag}`;
         
-        // Update download links with data attributes
+        // Asset'lerden dosya adlarını kullan, yoksa fallback
         const downloadLinks = {
-            'windows-setup': `${baseUrl}/BeeLocal-Setup-${version}-win-x64.exe`,
-            'windows-portable': `${baseUrl}/BeeLocal-Portable-${version}-win-x64.exe`,
-            'macos-arm64-dmg': `${baseUrl}/BeeLocal-${version}-arm64.dmg`,
-            'macos-x64-dmg': `${baseUrl}/BeeLocal-${version}-x64.dmg`,
-            'linux-appimage': `${baseUrl}/BeeLocal-${version}-linux-x64.AppImage`,
-            'linux-deb': `${baseUrl}/BeeLocal-${version}-linux-x64.deb`
+            'windows-setup': assets['windows-setup']
+                ? `${baseUrl}/${assets['windows-setup']}`
+                : `${baseUrl}/BeeLocal-Setup-${version}-win32-x64.exe`,
+            'windows-portable': assets['windows-portable']
+                ? `${baseUrl}/${assets['windows-portable']}`
+                : `${baseUrl}/BeeLocal-Portable-${version}-win32-x64.exe`,
+            'macos-arm64-dmg': assets['macos-arm64']
+                ? `${baseUrl}/${assets['macos-arm64']}`
+                : `${baseUrl}/BeeLocal-${version}-arm64.dmg`,
+            'macos-x64-dmg': assets['macos-x64']
+                ? `${baseUrl}/${assets['macos-x64']}`
+                : `${baseUrl}/BeeLocal-${version}-x64.dmg`,
+            'linux-appimage': assets['linux-appimage']
+                ? `${baseUrl}/${assets['linux-appimage']}`
+                : `${baseUrl}/BeeLocal-${version}-linux-x86_64.AppImage`,
+            'linux-deb': assets['linux-deb']
+                ? `${baseUrl}/${assets['linux-deb']}`
+                : `${baseUrl}/BeeLocal-${version}-linux-amd64.deb`
         };
         
         // Update links with data attributes
@@ -146,7 +184,7 @@ async function updateAllDownloadLinks() {
             versionBadge.textContent = `Versiyon ${version}`;
         }
         
-        console.log(`✅ İndirme linkleri güncellendi: v${version}`);
+        console.log(`✅ İndirme linkleri güncellendi: v${version}`, assets);
     } catch (error) {
         console.warn('İndirme linkleri güncellenirken hata:', error);
     }
