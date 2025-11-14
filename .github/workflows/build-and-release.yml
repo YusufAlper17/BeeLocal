@@ -1,0 +1,139 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac
+            arch: arm64
+          - os: macos-latest
+            platform: mac
+            arch: x64
+          - os: windows-latest
+            platform: win
+            arch: x64
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare icons
+        run: npm run prepare-icons
+
+      - name: Build application
+        run: npm run build
+        env:
+          ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: true
+
+      - name: Build for platform
+        run: |
+          if [ "${{ matrix.platform }}" == "mac" ]; then
+            npx electron-builder --mac --${{ matrix.arch }} --publish never
+          elif [ "${{ matrix.platform }}" == "win" ]; then
+            npx electron-builder --win --x64 --publish never
+          else
+            npx electron-builder --linux --x64 --publish never
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}-${{ matrix.arch }}
+          path: release/
+          retention-days: 7
+          if-no-files-found: warn
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: '*'
+          merge-multiple: false
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Prepare release files
+        run: |
+          mkdir -p release-files
+          
+          # macOS files
+          find artifacts/mac-arm64 -name "*.dmg" -o -name "*.zip" | xargs -I {} cp {} release-files/ 2>/dev/null || true
+          find artifacts/mac-x64 -name "*.dmg" -o -name "*.zip" | xargs -I {} cp {} release-files/ 2>/dev/null || true
+          
+          # Windows files
+          find artifacts/win-x64 -name "*.exe" | xargs -I {} cp {} release-files/ 2>/dev/null || true
+          
+          # Linux files
+          find artifacts/linux-x64 -name "*.AppImage" -o -name "*.deb" | xargs -I {} cp {} release-files/ 2>/dev/null || true
+          
+          ls -lh release-files/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          name: BeeLocal ${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## 🐝 BeeLocal ${{ steps.get_version.outputs.VERSION }}
+
+            ### 📦 İndirme Dosyaları
+
+            **macOS:**
+            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-arm64.dmg (Apple Silicon)
+            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-arm64-mac.zip (Apple Silicon)
+            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-x64.dmg (Intel) - Eğer mevcutsa
+            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-x64-mac.zip (Intel) - Eğer mevcutsa
+
+            **Windows:**
+            - BeeLocal-Setup-${{ steps.get_version.outputs.VERSION }}-win-x64.exe (Installer)
+            - BeeLocal-Portable-${{ steps.get_version.outputs.VERSION }}-win-x64.exe (Portable)
+
+            **Linux:**
+            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-linux-x64.AppImage
+            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-linux-amd64.deb
+
+            ### 📝 Değişiklikler
+
+            Detaylar için [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) dosyasına bakın.
+
+            ---
+            Made with ❤️ by İTÜ Students
+          files: release-files/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

@@ -35,6 +35,43 @@ function detectPlatform() {
     return 'unknown';
 }
 
+// ==================== Get Latest Release Version ====================
+async function getLatestReleaseVersion() {
+    try {
+        const response = await fetch('https://api.github.com/repos/YusufAlper17/BeeLocal/releases/latest');
+        if (!response.ok) {
+            throw new Error('Release bilgisi alınamadı');
+        }
+        const data = await response.json();
+        // Tag formatından versiyonu çıkar (örn: "v1.0.0" -> "1.0.0")
+        const version = data.tag_name.replace(/^v/, '');
+        return { version, tag: data.tag_name };
+    } catch (error) {
+        console.warn('Latest release bilgisi alınamadı, varsayılan versiyon kullanılıyor:', error);
+        // Fallback: package.json'dan veya varsayılan versiyon
+        return { version: '1.0.0', tag: 'v1.0.0' };
+    }
+}
+
+// ==================== Update Download Links ====================
+async function updateDownloadLinks() {
+    const { version, tag } = await getLatestReleaseVersion();
+    const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/download/${tag}`;
+    
+    // Update all download links on the page
+    const links = document.querySelectorAll('a[href*="releases/download"]');
+    links.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && href.includes('v1.0.0')) {
+            // Replace version in URL
+            const newHref = href.replace(/v1\.0\.0/g, tag).replace(/1\.0\.0/g, version);
+            link.setAttribute('href', newHref);
+        }
+    });
+    
+    return { version, tag, baseUrl };
+}
+
 function updatePrimaryDownloadButton() {
     const platform = detectPlatform();
     const downloadBtn = document.getElementById('primary-download-btn');
@@ -42,40 +79,83 @@ function updatePrimaryDownloadButton() {
     
     if (!downloadBtn || !downloadText) return;
     
-    const downloadLinks = {
-        'macOS': {
-            text: 'macOS için İndir',
-            url: 'https://github.com/YusufAlper17/BeeLocal/releases/download/v1.0.0/BeeLocal-1.0.0-arm64.dmg'
-        },
-        'Windows': {
-            text: 'Windows için İndir',
-            url: 'https://github.com/YusufAlper17/BeeLocal/releases/download/v1.0.0/BeeLocal-Setup-1.0.0-win-x64.exe'
-        },
-        'Linux': {
-            text: 'Linux için İndir',
-            url: 'https://github.com/YusufAlper17/BeeLocal/releases/download/v1.0.0/BeeLocal-1.0.0-linux-x64.AppImage'
-        },
-        'unknown': {
-            text: 'İndir',
-            url: '#download'
+    // Get latest release version
+    getLatestReleaseVersion().then(({ version, tag }) => {
+        const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/download/${tag}`;
+        
+        const downloadLinks = {
+            'macOS': {
+                text: 'macOS için İndir',
+                url: `${baseUrl}/BeeLocal-${version}-arm64.dmg`
+            },
+            'Windows': {
+                text: 'Windows için İndir',
+                url: `${baseUrl}/BeeLocal-Setup-${version}-win-x64.exe`
+            },
+            'Linux': {
+                text: 'Linux için İndir',
+                url: `${baseUrl}/BeeLocal-${version}-linux-x64.AppImage`
+            },
+            'unknown': {
+                text: 'İndir',
+                url: '#download'
+            }
+        };
+        
+        const platformData = downloadLinks[platform];
+        downloadText.textContent = platformData.text;
+        downloadBtn.href = platformData.url;
+        
+        // If unknown platform, scroll to download section instead
+        if (platform === 'unknown') {
+            downloadBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('download').scrollIntoView({ behavior: 'smooth' });
+            });
         }
-    };
-    
-    const platformData = downloadLinks[platform];
-    downloadText.textContent = platformData.text;
-    downloadBtn.href = platformData.url;
-    
-    // If unknown platform, scroll to download section instead
-    if (platform === 'unknown') {
-        downloadBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('download').scrollIntoView({ behavior: 'smooth' });
+    });
+}
+
+// ==================== Update Download Links Dynamically ====================
+async function updateAllDownloadLinks() {
+    try {
+        const { version, tag, baseUrl } = await updateDownloadLinks();
+        
+        // Update download links with data attributes
+        const downloadLinks = {
+            'windows-setup': `${baseUrl}/BeeLocal-Setup-${version}-win-x64.exe`,
+            'windows-portable': `${baseUrl}/BeeLocal-Portable-${version}-win-x64.exe`,
+            'macos-dmg': `${baseUrl}/BeeLocal-${version}-arm64.dmg`,
+            'macos-zip': `${baseUrl}/BeeLocal-${version}-arm64-mac.zip`,
+            'linux-appimage': `${baseUrl}/BeeLocal-${version}-linux-x64.AppImage`,
+            'linux-deb': `${baseUrl}/BeeLocal-${version}-linux-amd64.deb`
+        };
+        
+        // Update links with data attributes
+        Object.keys(downloadLinks).forEach(type => {
+            const link = document.querySelector(`a[data-download-type="${type}"]`);
+            if (link) {
+                link.href = downloadLinks[type];
+            }
         });
+        
+        // Update version badge if exists
+        const versionBadge = document.getElementById('version-badge');
+        if (versionBadge) {
+            versionBadge.textContent = `Versiyon ${version}`;
+        }
+        
+        console.log(`✅ İndirme linkleri güncellendi: v${version}`);
+    } catch (error) {
+        console.warn('İndirme linkleri güncellenirken hata:', error);
     }
 }
 
-// Run platform detection when page loads
-document.addEventListener('DOMContentLoaded', updatePrimaryDownloadButton);
+// Run platform detection and update links when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    updatePrimaryDownloadButton();
+    updateAllDownloadLinks();
+});
 
 // ==================== Smooth Scroll ====================
 document.addEventListener('DOMContentLoaded', function() {
@@ -207,22 +287,72 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ==================== Copy macOS Command ====================
 function copyMacCommand(evt) {
-    const command = document.getElementById('mac-command').textContent.trim();
+    evt.preventDefault();
+    evt.stopPropagation();
+    
+    const commandElement = document.getElementById('mac-command');
+    const command = commandElement ? commandElement.textContent.trim() : '';
+    
+    if (!command) {
+        console.error('Komut bulunamadı');
+        return;
+    }
+    
     navigator.clipboard.writeText(command).then(() => {
-        const btn = evt.currentTarget || evt.target;
-        const span = btn.querySelector('span');
-        if (span) {
-            const originalText = span.textContent;
-            span.textContent = '✅ Kopyalandı!';
+        // Button feedback
+        const btn = evt.currentTarget || evt.target.closest('.command-copy-btn-final');
+        if (btn) {
             btn.classList.add('copied');
-            setTimeout(() => {
-                span.textContent = originalText;
-                btn.classList.remove('copied');
-            }, 2000);
+            const span = btn.querySelector('.command-copy-text-final');
+            if (span) {
+                const originalText = span.textContent;
+                span.textContent = 'Kopyalandı!';
+                setTimeout(() => {
+                    span.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }
         }
+        
+        // Show bubble popup
+        showCopySuccessBubble();
     }).catch(err => {
         console.error('Kopyalama başarısız:', err);
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = command;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showCopySuccessBubble();
+        } catch (fallbackErr) {
+            console.error('Fallback kopyalama da başarısız:', fallbackErr);
+        }
+        document.body.removeChild(textArea);
     });
+}
+
+// ==================== Show Copy Success Bubble ====================
+function showCopySuccessBubble() {
+    const bubble = document.getElementById('copy-success-bubble');
+    if (!bubble) return;
+    
+    // Remove any existing show class
+    bubble.classList.remove('show');
+    
+    // Force reflow
+    void bubble.offsetWidth;
+    
+    // Show bubble
+    bubble.classList.add('show');
+    
+    // Hide after 3 seconds
+    setTimeout(() => {
+        bubble.classList.remove('show');
+    }, 3000);
 }
 
 // ==================== Keyboard Navigation ====================
