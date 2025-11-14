@@ -56,15 +56,17 @@ async function getLatestReleaseVersion() {
 // ==================== Update Download Links ====================
 async function updateDownloadLinks() {
     const { version, tag } = await getLatestReleaseVersion();
-    const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/download/${tag}`;
+    const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/latest/download`;
     
     // Update all download links on the page
-    const links = document.querySelectorAll('a[href*="releases/download"]');
+    const links = document.querySelectorAll('a[href*="releases/download"], a[href*="releases/latest"]');
     links.forEach(link => {
         const href = link.getAttribute('href');
-        if (href && href.includes('v1.0.0')) {
-            // Replace version in URL
-            const newHref = href.replace(/v1\.0\.0/g, tag).replace(/1\.0\.0/g, version);
+        if (href && (href.includes('1.0.0') || href.includes('1.0.1'))) {
+            // Replace version in URL with latest
+            const newHref = href.replace(/\/releases\/download\/v[\d.]+/, baseUrl)
+                                 .replace(/\/releases\/latest\/download\/BeeLocal-[\d.]+/, `${baseUrl}/BeeLocal-${version}`)
+                                 .replace(/BeeLocal-[\d.]+-/, `BeeLocal-${version}-`);
             link.setAttribute('href', newHref);
         }
     });
@@ -81,7 +83,7 @@ function updatePrimaryDownloadButton() {
     
     // Get latest release version
     getLatestReleaseVersion().then(({ version, tag }) => {
-        const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/download/${tag}`;
+        const baseUrl = `https://github.com/YusufAlper17/BeeLocal/releases/latest/download`;
         
         const downloadLinks = {
             'macOS': {
@@ -125,10 +127,10 @@ async function updateAllDownloadLinks() {
         const downloadLinks = {
             'windows-setup': `${baseUrl}/BeeLocal-Setup-${version}-win-x64.exe`,
             'windows-portable': `${baseUrl}/BeeLocal-Portable-${version}-win-x64.exe`,
-            'macos-dmg': `${baseUrl}/BeeLocal-${version}-arm64.dmg`,
-            'macos-zip': `${baseUrl}/BeeLocal-${version}-arm64-mac.zip`,
+            'macos-arm64-dmg': `${baseUrl}/BeeLocal-${version}-arm64.dmg`,
+            'macos-x64-dmg': `${baseUrl}/BeeLocal-${version}-x64.dmg`,
             'linux-appimage': `${baseUrl}/BeeLocal-${version}-linux-x64.AppImage`,
-            'linux-deb': `${baseUrl}/BeeLocal-${version}-linux-amd64.deb`
+            'linux-deb': `${baseUrl}/BeeLocal-${version}-linux-x64.deb`
         };
         
         // Update links with data attributes
