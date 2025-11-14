@@ -23,7 +23,9 @@ jobs:
         run: npm ci
 
       - name: Clean previous builds
-        run: rm -rf release/ dist/
+        run: |
+          rm -rf release/ dist/ dist-electron/ build/
+          mkdir -p build
 
       - name: Prepare icons
         run: npm run prepare-icons
@@ -35,9 +37,7 @@ jobs:
         run: npx vite build
 
       - name: Build for macOS ARM64
-        run: |
-          rm -rf release/
-          npx electron-builder --mac --arm64 --publish never
+        run: npx electron-builder --mac --arm64 --publish never
         env:
           ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: true
 
@@ -65,7 +65,9 @@ jobs:
         run: npm ci
 
       - name: Clean previous builds
-        run: rm -rf release/ dist/
+        run: |
+          rm -rf release/ dist/ dist-electron/ build/
+          mkdir -p build
 
       - name: Prepare icons
         run: npm run prepare-icons
@@ -77,9 +79,7 @@ jobs:
         run: npx vite build
 
       - name: Build for macOS x64
-        run: |
-          rm -rf release/
-          npx electron-builder --mac --x64 --publish never
+        run: npx electron-builder --mac --x64 --publish never
         env:
           ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: true
 
@@ -118,7 +118,9 @@ jobs:
         run: npm ci
 
       - name: Clean previous builds
-        run: rm -rf release/ dist/
+        run: |
+          rm -rf release/ dist/ dist-electron/ build/
+          mkdir -p build
 
       - name: Prepare icons
         run: npm run prepare-icons
@@ -131,7 +133,6 @@ jobs:
 
       - name: Build for platform
         run: |
-          rm -rf release/
           if [ "${{ matrix.platform }}" == "mac" ]; then
             npx electron-builder --mac --${{ matrix.arch }} --publish never
           elif [ "${{ matrix.platform }}" == "win" ]; then
@@ -199,17 +200,15 @@ jobs:
 
             **macOS:**
             - BeeLocal-${{ steps.get_version.outputs.VERSION }}-arm64.dmg (Apple Silicon)
-            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-arm64-mac.zip (Apple Silicon)
-            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-x64.dmg (Intel) - Eğer mevcutsa
-            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-x64-mac.zip (Intel) - Eğer mevcutsa
+            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-x64.dmg (Intel)
 
             **Windows:**
-            - BeeLocal-Setup-${{ steps.get_version.outputs.VERSION }}-win-x64.exe (Installer)
-            - BeeLocal-Portable-${{ steps.get_version.outputs.VERSION }}-win-x64.exe (Portable)
+            - BeeLocal-Setup-${{ steps.get_version.outputs.VERSION }}-win-x64.exe (Kurulum)
+            - BeeLocal-Portable-${{ steps.get_version.outputs.VERSION }}-win-x64.exe (Taşınabilir)
 
             **Linux:**
             - BeeLocal-${{ steps.get_version.outputs.VERSION }}-linux-x64.AppImage
-            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-linux-amd64.deb
+            - BeeLocal-${{ steps.get_version.outputs.VERSION }}-linux-x64.deb
 
             ### 📝 Değişiklikler
 

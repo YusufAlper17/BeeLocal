@@ -61,9 +61,12 @@
     "mac": {
       "category": "public.app-category.education",
       "target": [
-        "dmg",
-        "zip"
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
       ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
       "identity": null,
       "gatekeeperAssess": false,
       "hardenedRuntime": false,
@@ -94,16 +97,36 @@
     },
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
       ],
+      "artifactName": "${productName}-${version}-${platform}-${arch}.${ext}",
       "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "artifactName": "${productName}-Setup-${version}-${platform}-${arch}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}-${platform}-${arch}.${ext}"
     },
     "linux": {
       "target": [
-        "AppImage",
-        "deb"
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        }
       ],
+      "artifactName": "${productName}-${version}-${platform}-${arch}.${ext}",
       "maintainer": "BeeLocal Team <support@beelocal.app>",
       "icon": "build/icon.png"
     },
@@ -112,20 +135,6 @@
       "dist-electron/**/*",
       "electron/preload.cjs",
       "package.json"
-    ],
-    "extraResources": [
-      {
-        "from": "build/icon.icns",
-        "to": "icon.icns"
-      },
-      {
-        "from": "build/icon.ico",
-        "to": "icon.ico"
-      },
-      {
-        "from": "build/icon.png",
-        "to": "icon.png"
-      }
     ],
     "directories": {
       "output": "release"

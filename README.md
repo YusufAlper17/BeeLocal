@@ -85,10 +85,13 @@ paylaşılır ve yönetilir.
 
 #### Hazır Kurulum Dosyaları (Önerilen)
 
-1. [Releases](https://github.com/yusufalperilhan/BeeLocal/releases) sayfasından platformunuza uygun dosyayı indirin:
-   - **macOS**: `BeeLocal-1.0.0-arm64.dmg`
-   - **Windows**: `BeeLocal-Setup-1.0.0-win-x64.exe`
-   - **Linux**: `BeeLocal-1.0.0-linux-x64.AppImage`
+1. [Releases](https://github.com/YusufAlper17/BeeLocal/releases) sayfasından platformunuza uygun dosyayı indirin:
+   - **macOS (Apple Silicon)**: `BeeLocal-1.0.0-arm64.dmg`
+   - **macOS (Intel)**: `BeeLocal-1.0.0-x64.dmg`
+   - **Windows (Kurulum)**: `BeeLocal-Setup-1.0.0-win-x64.exe`
+   - **Windows (Taşınabilir)**: `BeeLocal-Portable-1.0.0-win-x64.exe`
+   - **Linux (AppImage)**: `BeeLocal-1.0.0-linux-x64.AppImage`
+   - **Linux (Debian)**: `BeeLocal-1.0.0-linux-x64.deb`
 
 2. İndirdiğiniz dosyayı çalıştırın ve kurulum adımlarını takip edin
 

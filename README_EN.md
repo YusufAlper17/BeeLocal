@@ -8,7 +8,7 @@ Modern desktop application for İTÜ Ninova platform. Easily track, manage, and 
   [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
   [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](CHANGELOG.md)
   [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg)]()
-  [![Website](https://img.shields.io/badge/website-GitHub%20Pages-blue)](https://yusufalperilhan.github.io/BeeLocal)
+  [![Website](https://img.shields.io/badge/website-GitHub%20Pages-blue)](https://YusufAlper17.github.io/BeeLocal)
   
   [🇹🇷 Türkçe](README.md) • [🇬🇧 English](README_EN.md)
 </div>
@@ -83,10 +83,13 @@ Modern desktop application for İTÜ Ninova platform. Easily track, manage, and 
 
 #### Pre-built Installers (Recommended)
 
-1. Download the appropriate file for your platform from the [Releases](https://github.com/yusufalperilhan/BeeLocal/releases) page:
-   - **macOS**: `BeeLocal-1.0.0-arm64.dmg`
-   - **Windows**: `BeeLocal-Setup-1.0.0-win-x64.exe`
-   - **Linux**: `BeeLocal-1.0.0-linux-x64.AppImage`
+1. Download the appropriate file for your platform from the [Releases](https://github.com/YusufAlper17/BeeLocal/releases) page:
+   - **macOS (Apple Silicon)**: `BeeLocal-1.0.0-arm64.dmg`
+   - **macOS (Intel)**: `BeeLocal-1.0.0-x64.dmg`
+   - **Windows (Setup)**: `BeeLocal-Setup-1.0.0-win-x64.exe`
+   - **Windows (Portable)**: `BeeLocal-Portable-1.0.0-win-x64.exe`
+   - **Linux (AppImage)**: `BeeLocal-1.0.0-linux-x64.AppImage`
+   - **Linux (Debian)**: `BeeLocal-1.0.0-linux-x64.deb`
 
 2. Run the downloaded file and follow the installation steps
 
@@ -94,7 +97,7 @@ Modern desktop application for İTÜ Ninova platform. Easily track, manage, and 
 
 ```bash
 # Clone the repository
-git clone https://github.com/yusufalperilhan/BeeLocal.git
+git clone https://github.com/YusufAlper17/BeeLocal.git
 cd BeeLocal
 
 # Install dependencies
@@ -176,7 +179,7 @@ BeeLocal/
 
 ## 🌐 Website (GitHub Pages)
 
-BeeLocal's official website is published via GitHub Pages: [yusufalperilhan.github.io/BeeLocal](https://yusufalperilhan.github.io/BeeLocal)
+BeeLocal's official website is published via GitHub Pages: [YusufAlper17.github.io/BeeLocal](https://YusufAlper17.github.io/BeeLocal)
 
 The website includes application features, screenshots, and download links.
 
@@ -192,7 +195,7 @@ Contributions are welcome! To contribute to the project:
 
 ## 🐛 Bug Reports
 
-If you find a bug or have a suggestion, please open a new issue on the [Issues](https://github.com/yusufalperilhan/BeeLocal/issues) page.
+If you find a bug or have a suggestion, please open a new issue on the [Issues](https://github.com/YusufAlper17/BeeLocal/issues) page.
 
 ## 📝 Changelog
 
@@ -226,6 +229,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 <div align="center">
   
   
-  [Website](https://yusufalperilhan.github.io/BeeLocal) • [Documentation](docs/) • [Report Bug](https://github.com/yusufalperilhan/BeeLocal/issues) • [Request Feature](https://github.com/yusufalperilhan/BeeLocal/issues)
+  [Website](https://YusufAlper17.github.io/BeeLocal) • [Documentation](docs/) • [Report Bug](https://github.com/YusufAlper17/BeeLocal/issues) • [Request Feature](https://github.com/YusufAlper17/BeeLocal/issues)
 </div>
 
